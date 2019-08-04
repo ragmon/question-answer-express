@@ -2,14 +2,16 @@ const db = require('../db').instance();
 
 class Question {
   static find(id) {
-    const sql = `SELECT * FROM question WHERE id = ?`;
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT * FROM question WHERE id = ?`;
 
-    return db.get(sql, [id], (err, row) => {
-      if (err) {
-        throw err;
-      }
-      return row
-    });
+      db.get(sql, [id], (err, row) => {
+        if (err) {
+          reject(err);
+        }
+        return resolve(row)
+      });
+    })
   }
 
   static all() {
@@ -23,10 +25,21 @@ class Question {
         resolve(rows);
       });
     });
+  }
 
+  static create(title, description) {
+    console.log('create', title, description);
+    return new Promise((resolve, reject) => {
+      const sql = `INSERT INTO question (title, description, created_at) VALUES (?, ?, datetime('now'))`;
 
-    //
-    // return items;
+      db.run(sql, [title, description], function (err) {
+        if (err) {
+          reject(err);
+        } else {
+          Question.find(this.lastID).then(question => resolve(question))
+        }
+      });
+    })
   }
 }
 
