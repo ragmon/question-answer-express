@@ -1,5 +1,6 @@
 const express = require('express');
 const Question = require('../db/model/question');
+const Answer = require('../db/model/answer');
 const router = express.Router();
 
 router.get('/question', function(req, res, next) {
@@ -37,7 +38,9 @@ router.post('/question/:id/rate_down', function(req, res, next) {
 });
 
 router.post('/question/:id/answer', function(req, res, next) {
-  //
+  Answer.create(req.params.id, req.body.text)
+    .then(answer => res.send(JSON.stringify(answer)))
+    .catch(reason => res.send(JSON.stringify({ error : reason })))
 });
 
 module.exports = router;

@@ -9,9 +9,9 @@ class Question {
         if (err) {
           reject(err);
         }
-        return resolve(row)
+        resolve(row)
       });
-    })
+    });
   }
 
   static all() {
@@ -28,18 +28,18 @@ class Question {
   }
 
   static create(title, description) {
-    console.log('create', title, description);
     return new Promise((resolve, reject) => {
       const sql = `INSERT INTO question (title, description, created_at) VALUES (?, ?, datetime('now'))`;
 
       db.run(sql, [title, description], function (err) {
         if (err) {
           reject(err);
-        } else {
-          Question.find(this.lastID).then(question => resolve(question))
         }
+        Question.find(this.lastID)
+          .then(question => resolve(question))
+          .catch(reason => reject(reason))
       });
-    })
+    });
   }
 }
 
