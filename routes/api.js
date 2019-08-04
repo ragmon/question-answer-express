@@ -1,10 +1,12 @@
 const express = require('express');
+const Question = require('../db/model/question');
 const router = express.Router();
 
 router.get('/question', function(req, res, next) {
-  const questions = Question.all();
-
-  res.send(JSON.stringify(questions));
+  Question.all().then((questions) => {
+    console.log("rows", questions);
+    res.send(JSON.stringify(questions));
+  });
 });
 
 router.get('/question/:id', function(req, res, next) {
