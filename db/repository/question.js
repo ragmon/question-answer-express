@@ -26,7 +26,7 @@ class Question {
     });
   }
 
-  static all() {
+  static all(userId) {
     return new Promise((resolve, reject) => {
       const sql = `SELECT *,
                           (SELECT COUNT(*)
@@ -38,10 +38,15 @@ class Question {
                            FROM rate
                            WHERE action = 'down'
                              AND resource_id = q.id
-                             AND resource_type = 'question') as rate_down
-                   FROM question as q ORDER BY created_at DESC`;
+                             AND resource_type = 'question') as rate_down,
+                          (SELECT COUNT(*)
+                           FROM answer as a
+                           WHERE a.question_id = q.id
+                             AND a.user_id = ?)      as was_answered
+                   FROM question as q
+                   ORDER BY created_at DESC`;
 
-      db.all(sql, [], (err, rows) => {
+      db.all(sql, [userId], (err, rows) => {
         if (err) {
           reject(err);
         }

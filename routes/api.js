@@ -12,7 +12,7 @@ router.use(function (req, res, next) {
 });
 
 router.get('/question', function(req, res, next) {
-  Question.all()
+  Question.all(req.headers['x-user-id'])
     .then(questions => res.send(JSON.stringify(questions)))
     .catch(reason => res.send(JSON.stringify({ error : reason })));
 });
