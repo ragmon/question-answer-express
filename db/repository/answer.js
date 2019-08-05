@@ -15,7 +15,6 @@ class Answer {
   }
 
   static create(question_id, text) {
-    console.log("create", question_id, text);
     return new Promise((resolve, reject) => {
       const sql = `INSERT INTO answer (question_id, text, created_at) VALUES (?, ?, datetime('now'))`;
 
@@ -26,6 +25,19 @@ class Answer {
         Answer.find(this.lastID)
           .then(answer => resolve(answer))
           .catch(reason => reject(reason))
+      });
+    });
+  }
+
+  static findByQuestionId(questionId) {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT * FROM answer WHERE question_id = ?`;
+
+      db.all(sql, [questionId], (err, rows) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(rows)
       });
     });
   }
