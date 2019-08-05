@@ -4,6 +4,13 @@ const Answer = require('../db/repository/answer');
 const Rate = require('../db/repository/rate');
 const router = express.Router();
 
+// Makes routes available only if user ID received
+router.use(function (req, res, next) {
+  if (!req.headers['x-user-id']) return next('router');
+  console.log('x-user-id', req.headers['x-user-id']);
+  next();
+});
+
 router.get('/question', function(req, res, next) {
   Question.all()
     .then(questions => res.send(JSON.stringify(questions)))
