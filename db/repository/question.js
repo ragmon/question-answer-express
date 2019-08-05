@@ -39,7 +39,7 @@ class Question {
                            WHERE action = 'down'
                              AND resource_id = q.id
                              AND resource_type = 'question') as rate_down
-                   FROM question as q`;
+                   FROM question as q ORDER BY created_at DESC`;
 
       db.all(sql, [], (err, rows) => {
         if (err) {
