@@ -50,12 +50,12 @@ class Question {
     });
   }
 
-  static create(title, description) {
+  static create(title, description, userId) {
     return new Promise((resolve, reject) => {
-      const sql = `INSERT INTO question (title, description, created_at)
-                   VALUES (?, ?, datetime('now'))`;
+      const sql = `INSERT INTO question (title, description, user_id, created_at)
+                   VALUES (?, ?, ?, datetime('now'))`;
 
-      db.run(sql, [title, description], function (err) {
+      db.run(sql, [title, description, userId], function (err) {
         if (err) {
           reject(err);
         }

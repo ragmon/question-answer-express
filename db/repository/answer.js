@@ -14,11 +14,11 @@ class Answer {
     });
   }
 
-  static create(question_id, text) {
+  static create(questionId, text, userId) {
     return new Promise((resolve, reject) => {
-      const sql = `INSERT INTO answer (question_id, text, created_at) VALUES (?, ?, datetime('now'))`;
+      const sql = `INSERT INTO answer (question_id, text, user_id, created_at) VALUES (?, ?, ?, datetime('now'))`;
 
-      db.run(sql, [question_id, text], function (err) {
+      db.run(sql, [questionId, text, userId], function (err) {
         if (err) {
           reject(err);
         }

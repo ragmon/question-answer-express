@@ -14,11 +14,11 @@ class Rate {
     });
   }
 
-  static create(resourceType, resourceId, action) {
+  static create(resourceType, resourceId, action, userId) {
     return new Promise((resolve, reject) => {
-      const sql = `INSERT INTO rate (resource_type, resource_id, action, created_at) VALUES (?, ?, ?, datetime('now'))`;
+      const sql = `INSERT INTO rate (resource_type, resource_id, action, user_id, created_at) VALUES (?, ?, ?, ?, datetime('now'))`;
 
-      db.run(sql, [resourceType, resourceId, action], function (err) {
+      db.run(sql, [resourceType, resourceId, action, userId], function (err) {
         if (err) {
           reject(err);
         }

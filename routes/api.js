@@ -24,7 +24,7 @@ router.get('/question/:id', function(req, res, next) {
 });
 
 router.post('/question', function(req, res, next) {
-  Question.create(req.body.title, req.body.description)
+  Question.create(req.body.title, req.body.description, req.headers['x-user-id'])
     .then(question => res.send(JSON.stringify(question)))
     .catch(reason => res.send(JSON.stringify({ error : reason })));
 });
@@ -38,19 +38,19 @@ router.delete('/question/:id', function(req, res, next) {
 });
 
 router.post('/question/:id/rate_up', function(req, res, next) {
-  Rate.create('question', req.params.id, Rate.ACTION_UP)
+  Rate.create('question', req.params.id, Rate.ACTION_UP, req.headers['x-user-id'])
     .then(rate => res.send(JSON.stringify(rate)))
     .catch(reason => res.send(JSON.stringify({ error : reason })));
 });
 
 router.post('/question/:id/rate_down', function(req, res, next) {
-  Rate.create('question', req.params.id, Rate.ACTION_DOWN)
+  Rate.create('question', req.params.id, Rate.ACTION_DOWN, req.headers['x-user-id'])
     .then(rate => res.send(JSON.stringify(rate)))
     .catch(reason => res.send(JSON.stringify({ error : reason })));
 });
 
 router.post('/question/:id/answer', function(req, res, next) {
-  Answer.create(req.params.id, req.body.text)
+  Answer.create(req.params.id, req.body.text, req.headers['x-user-id'])
     .then(answer => res.send(JSON.stringify(answer)))
     .catch(reason => res.send(JSON.stringify({ error : reason })))
 });
