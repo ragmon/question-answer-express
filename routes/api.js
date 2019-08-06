@@ -30,12 +30,14 @@ router.post('/question', function(req, res, next) {
 });
 
 router.put('/question/:id', function(req, res, next) {
-  //
+  Question.update(req.params.id, req.body.title, req.body.description)
+    .then(question => res.send(JSON.stringify(question)))
+    .catch(reason => res.send(JSON.stringify({ error : reason })))
 });
 
 router.delete('/question/:id', function(req, res, next) {
   Question.delete(req.params.id)
-    .then(() => res.send())
+    .then(() => res.send(JSON.stringify({ status : 'success' })))
     .catch(reason => res.send(JSON.stringify({ error : reason })));
 });
 
