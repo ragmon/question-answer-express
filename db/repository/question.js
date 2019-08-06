@@ -3,6 +3,7 @@ const db = require('../db').instance();
 class Question {
     static find(id) {
         return new Promise((resolve, reject) => {
+            // TODO: apply sql SELECT part from "all" method
             const sql = `SELECT *,
                           (SELECT COUNT(*)
                            FROM rate
@@ -47,11 +48,15 @@ class Question {
                             FROM rate AS r 
                             WHERE r.resource_id = q.id 
                              AND r.resource_type = 'question' 
-                             AND r.user_id = ?)              as was_rated
+                             AND r.user_id = ?)              as was_rated,
+                          (SELECT text 
+                            FROM answer AS a 
+                            WHERE a.question_id = q.id 
+                             AND a.user_id = ?) as own_answer
                    FROM question as q
                    ORDER BY created_at DESC`;
 
-            db.all(sql, [userId, userId], (err, rows) => {
+            db.all(sql, [userId, userId, userId], (err, rows) => {
                 if (err) {
                     reject(err);
                 }
