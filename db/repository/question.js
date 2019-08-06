@@ -42,7 +42,7 @@ class Question {
                           (SELECT COUNT(*)
                            FROM answer as a
                            WHERE a.question_id = q.id
-                             AND a.user_id = ?)      as was_answered
+                             AND a.user_id = ?)              as was_answered
                    FROM question as q
                    ORDER BY created_at DESC`;
 
@@ -67,6 +67,37 @@ class Question {
         Question.find(this.lastID)
           .then(question => resolve(question))
           .catch(reason => reject(reason))
+      });
+    });
+  }
+
+  static delete(id) {
+    return new Promise((resolve, reject) => {
+      const sql = `DELETE
+                   FROM question
+                   WHERE id = ?`;
+
+      db.run(sql, [id], function (err) {
+        if (err) {
+          reject(err);
+        }
+        resolve();
+      });
+    })
+  }
+
+  static update(id, title, description) {
+    return new Promise((resolve, reject) => {
+      const sql = `UPDATE question
+                   SET title       = ?,
+                       description = ?
+                   WHERE id = ?`;
+
+      db.run(sql, [title, description, id], function (err) {
+        if (err) {
+          reject(err);
+        }
+        resolve();
       });
     });
   }

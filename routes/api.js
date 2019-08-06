@@ -34,7 +34,9 @@ router.put('/question/:id', function(req, res, next) {
 });
 
 router.delete('/question/:id', function(req, res, next) {
-  //
+  Question.delete(req.params.id)
+    .then(() => res.send())
+    .catch(reason => res.send(JSON.stringify({ error : reason })));
 });
 
 router.post('/question/:id/rate_up', function(req, res, next) {
