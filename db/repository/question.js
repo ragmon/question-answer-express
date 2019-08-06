@@ -39,14 +39,19 @@ class Question {
                            WHERE action = 'down'
                              AND resource_id = q.id
                              AND resource_type = 'question') as rate_down,
-                          (SELECT COUNT(*)
+                          EXISTS(SELECT 1
                            FROM answer as a
                            WHERE a.question_id = q.id
-                             AND a.user_id = ?)              as was_answered
+                             AND a.user_id = ?)              as was_answered,
+                          EXISTS(SELECT 1 
+                            FROM rate AS r 
+                            WHERE r.resource_id = q.id 
+                             AND r.resource_type = 'question' 
+                             AND r.user_id = ?)              as was_rated
                    FROM question as q
                    ORDER BY created_at DESC`;
 
-            db.all(sql, [userId], (err, rows) => {
+            db.all(sql, [userId, userId], (err, rows) => {
                 if (err) {
                     reject(err);
                 }
